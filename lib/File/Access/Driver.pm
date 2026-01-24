@@ -1,10 +1,10 @@
 #
 # @author Bodo (Hugo) Barwich
-# @version 2023-03-28
+# @version 2026-01-24
 # @package File Access Driver
 # @subpackage lib/File/Access/Driver.pm
 
-# This module defines the base class of the application
+# This module defines the a class to interact with files
 #
 #---------------------------------
 # Requirements:
