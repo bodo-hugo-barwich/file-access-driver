@@ -232,7 +232,7 @@ sub setContent {
 sub setContentArray {
     my $self = $_[0];
 
-    $self->{'_file_content'} = \'';
+    $self->{'_file_content'}       = \'';
     $self->{'_file_content_lines'} = undef;
     $self->{'_buffered'} ||= 1;
 
@@ -700,8 +700,8 @@ sub Write {
 
     if ( $self->_isWritable() ) {
         my $iwrtcnt   = -1;
-        my $content = $self->getContent();
-        my $icntntlen = length( ${ $content } );
+        my $content   = $self->getContent();
+        my $icntntlen = length( ${$content} );
 
         print "cntnt len: '$icntntlen'\n";
         print "cntnt: '${ $content }'\n";
@@ -709,7 +709,7 @@ sub Write {
         $irs = 0;
 
         # Write the Content Line to the File
-        $iwrtcnt = syswrite( $self->{'_file'}, ${ $content } );
+        $iwrtcnt = syswrite( $self->{'_file'}, ${$content} );
 
         print "wrt cnt: '$iwrtcnt'\n";
 
@@ -1029,7 +1029,8 @@ sub getContent {
 
     if ( ${ $self->{'_file_content'} } eq '' ) {
         print "build cntnt ...\n";
-        print "build lns (" . scalar( @{ $self->{'_file_content_lines'} } ) . "): '"
+        print "build lns ("
+          . scalar( @{ $self->{'_file_content_lines'} } ) . "): '"
           . join( '|', @{ $self->{'_file_content_lines'} } ) . "'\n";
 
         if ( scalar( @{ $self->{'_file_content_lines'} } ) > 0 ) {
