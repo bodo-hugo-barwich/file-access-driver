@@ -1,6 +1,6 @@
 #
 # @author Bodo (Hugo) Barwich
-# @version 2026-01-24
+# @version 2026-01-30
 # @package File Access Driver
 # @subpackage lib/File/Access/Driver.pm
 
@@ -22,6 +22,8 @@
 # The File::Access::Driver Package
 
 package File::Access::Driver;
+
+our $VERSION = '1.0.0';
 
 #----------------------------------------------------------------------------
 #Dependencies
