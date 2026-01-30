@@ -1,4 +1,4 @@
-#Project Files
+# Project Files
 .project
 .includepath
 .settings
@@ -6,7 +6,10 @@
 *.tdy
 *.save
 
-#Packaging Files
+# Test Files
+**/testfile_out.txt
+
+# Packaging Files
 MYMETA.*
 MANIFEST
 MANIFEST.bak

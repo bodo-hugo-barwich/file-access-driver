@@ -39,13 +39,13 @@ sub new {
     my $class = ref($invocant) || $invocant;
     my $self  = undef;
 
-    #Set the Default Attributes and assign the initial Values
+    # Set the Default Attributes and assign the initial Values
     $self = {
         '_file'           => undef,
         '_directory_name' => '',
         '_file_name'      => '',
 
-        #A Reference to the Content Text
+        # A Reference to the Content Text
         '_file_content'       => undef,
         '_file_content_lines' => undef,
         '_file_time'          => -1,
@@ -62,11 +62,7 @@ sub new {
         '_error_code'         => 0
     };
 
-    #Bestow Objecthood
     bless $self, $class;
-
-    #print "in: '" . join(", ", @_) . "'\n";
-    #print "hsh prms: '"; foreach (keys %hshprms) { print "'$_' => '$hshprms{$_}'; "} print "'\n";
 
     if ( scalar( keys %hshprms ) > 0 ) {
         $self->setFileDirectory( $hshprms{'filedirectory'} ) if ( defined $hshprms{'filedirectory'} );
@@ -81,7 +77,7 @@ sub new {
 sub DESTROY {
     my $self = $_[0];
 
-    #Free the System Resources
+    # Free the System Resources
     $self->freeResources;
 }
 
@@ -107,7 +103,6 @@ sub setFileDirectory {
 
     #Clear the File Object
     $self->Clear;
-
 }
 
 sub setFileName {
@@ -139,7 +134,7 @@ sub setFilePath {
                 $sflnm  = $2;
             }
         }
-        else     #The Path does not include a Slash Sign
+        else    #The Path does not include a Slash Sign
         {
             $sflnm  = $sdirnm;
             $sdirnm = '';
@@ -196,13 +191,13 @@ sub changeFileName {
                 $irs = 0;
             }
         }
-        else     #File does not exist
+        else    #File does not exist
         {
             $self->{'_error_message'} .= "File does not exist!\n";
             $self->{'_error_code'} = 3 if ( $self->{'_error_code'} < 1 );
         }
     }
-    else         #New File Name was not given
+    else        #New File Name was not given
     {
         $self->{'_error_message'} .= "New File Name is not set!\n";
         $self->{'_error_code'} = 3 if ( $self->{'_error_code'} < 1 );
@@ -216,7 +211,7 @@ sub setContent {
 
     $self->{'_file_content'}       = undef;
     $self->{'_file_content_lines'} = undef;
-    $self->{'_buffered'}           = 1 unless ( $self->{'_buffered'} );
+    $self->{'_buffered'} ||= 1;
 
     if ( scalar(@_) > 1 ) {
         if ( ref( $_[1] ) eq '' ) {
@@ -235,9 +230,9 @@ sub setContent {
 sub setContentArray {
     my $self = $_[0];
 
-    ${ $self->{'_file_content'} } = '';
+    $self->{'_file_content'} = \'';
     $self->{'_file_content_lines'} = undef;
-    $self->{'_buffered'}           = 1 unless ( $self->{'_buffered'} );
+    $self->{'_buffered'} ||= 1;
 
     if ( scalar(@_) > 1 ) {
         if ( ref( $_[1] ) eq '' ) {
@@ -273,7 +268,7 @@ sub setFileTime {
             $irs = 0;
         }
     }
-    else     #File does not exist
+    else    #File does not exist
     {
         $self->{'_error_message'} .= "File does not exist!\n";
         $self->{'_error_code'} = 3 if ( $self->{'_error_code'} < 1 );
@@ -288,7 +283,7 @@ sub setBuffered {
     if ( scalar(@_) > 1 ) {
         if ( $_[1] =~ qr/^\d+$/ ) {
 
-            #The Parameter is an unsigned whole Number
+            # The parameter is an unsigned whole number
 
             if ( $_[1] != 0 ) {
                 $self->{'_buffered'} = 1;
@@ -314,7 +309,7 @@ sub setPersistent {
     if ( scalar(@_) > 1 ) {
         if ( $_[1] =~ qr/^\d+$/ ) {
 
-            #The Parameter is an unsigned whole Number
+            # The parameter is an unsigned whole number
 
             if ( $_[1] != 0 ) {
                 $self->{'_persistent'} = 1;
@@ -389,7 +384,7 @@ sub _openrFile {
             $self->{'_error_code'} = 3 if ( $self->{'_error_code'} < 1 );
         }
     }
-    else             #The File is open and in Reading Mode
+    else    #The File is open and in Reading Mode
     {
         $irs = 1;
     }
@@ -437,12 +432,12 @@ sub _openwFile {
 
                 $irs = 1 if ( $idircnt != -1 );
             }
-            else     # Directory does exist
+            else    # Directory does exist
             {
                 $irs = 1;
             }
         }
-        else         #The File Directory is not set
+        else        #The File Directory is not set
         {
             $irs = 1;
         }
@@ -464,7 +459,7 @@ sub _openwFile {
                         $irs = 1;
                     }
                 }
-                else     #The File could not be opened
+                else    #The File could not be opened
                 {
                     $self->{'_error_message'} .=
                         "File '"
@@ -477,7 +472,7 @@ sub _openwFile {
                     $irs = 0;
                 }
             }
-            else         #The File Name isnt set
+            else    #The File Name isnt set
             {
                 $self->{'_error_message'} .= "File Name isn't set!\n";
                 $self->{'_error_code'} = 3 if ( $self->{'_error_code'} < 1 );
@@ -486,13 +481,13 @@ sub _openwFile {
             }
         }
     }
-    else     #The File is already open in Appending Mode
+    else    #The File is already open in Appending Mode
     {
         $irs = 1;
-    }        #unless($self->_isWritable())
+    }       #unless($self->_isWritable())
 
     return $irs;
-};
+}
 
 sub _openaFile {
     my $self = $_[0];
@@ -529,12 +524,12 @@ sub _openaFile {
 
                 $irs = 1 if ( $idircnt != -1 );
             }
-            else     # Directory does exist
+            else    # Directory does exist
             {
                 $irs = 1;
             }
         }
-        else         #The File Directory is not set
+        else        #The File Directory is not set
         {
             $irs = 1;
         }
@@ -559,7 +554,7 @@ sub _openaFile {
                         $irs = 1;
                     }
                 }
-                else     #The File could not be opened
+                else    #The File could not be opened
                 {
                     $self->{'_error_message'} .=
                         "File '"
@@ -572,20 +567,20 @@ sub _openaFile {
                     $irs = 0;
                 }
             }
-            else         #The File Name isnt set
+            else    #The File Name isnt set
             {
                 $self->{'_error_message'} .= "File Name isn't set!\n";
                 $self->{'_error_code'} = 3 if ( $self->{'_error_code'} < 1 );
             }
         }
     }
-    else     #The File is already open in Appending Mode
+    else    #The File is already open in Appending Mode
     {
         $irs = 1;
-    }        #unless($self->_isAppendable())
+    }       #unless($self->_isAppendable())
 
     return $irs;
-};
+}
 
 sub Read {
     my $self = $_[0];
@@ -653,7 +648,7 @@ sub Read {
                 $self->_closeFile();
             }
         }
-        else     #File is not persistent
+        else    #File is not persistent
         {
             #Close the File
             $self->_closeFile();
@@ -674,7 +669,7 @@ sub readContent {
 sub readContentArray {
     my $self = $_[0];
 
-    FileAccessDriver::Read $self;
+    File::Access::Driver::Read $self;
 
     return $self->getContentArray;
 }
@@ -703,12 +698,18 @@ sub Write {
 
     if ( $self->_isWritable() ) {
         my $iwrtcnt   = -1;
-        my $icntntlen = length( ${ $self->{'_file_content'} } );
+        my $content = $self->getContent();
+        my $icntntlen = length( ${ $content } );
+
+        print "cntnt len: '$icntntlen'\n";
+        print "cntnt: '${ $content }'\n";
 
         $irs = 0;
 
-        #Write the Content Line to the File
-        $iwrtcnt = syswrite( $self->{'_file'}, ${ $self->{'_file_content'} } );
+        # Write the Content Line to the File
+        $iwrtcnt = syswrite( $self->{'_file'}, ${ $content } );
+
+        print "wrt cnt: '$iwrtcnt'\n";
 
         if ( defined $iwrtcnt ) {
             $irs = 1;
@@ -721,7 +722,7 @@ sub Write {
                   . "': '$iwrtcnt' from '$icntntlen' Bytes written.\n";
             }
         }
-        else    #An Error has ocurred
+        else    # An Error has ocurred
         {
             $self->{'_error_message'} .=
                 "File '"
@@ -759,7 +760,7 @@ sub Write {
                 $self->_closeFile();
             }
         }
-        else     #File is not persistent
+        else    #File is not persistent
         {
             #Close the File
             $self->_closeFile();
@@ -774,7 +775,7 @@ sub writeContent {
 
     $self->setContent( $_[1] );
 
-    return FileAccessDriver::Write $self;
+    return File::Access::Driver::Write $self;
 }
 
 sub appendLine {
@@ -864,7 +865,7 @@ sub appendLine {
                 $self->_closeFile();
             }
         }
-        else     #File is not persistent
+        else    #File is not persistent
         {
             #Close the File
             $self->_closeFile();
@@ -903,9 +904,9 @@ sub Delete {
             $irs = 0;
         }
     }
-    else     #The File does not exist
+    else    #The File does not exist
     {
-        $irs = 0;
+        $irs = 1;
     }
 
     return $irs;
@@ -915,7 +916,7 @@ sub _closeFile {
     my $self = $_[0];
     my $irs  = 0;
 
-    if ( $self->__isOpen() ) {
+    if ( $self->_isOpen() ) {
         if ( $self->{'_locked'} > 0 ) {
             $irs = flock( $self->{'_file'}, LOCK_UN );
 
@@ -962,7 +963,7 @@ sub _closeFile {
     }
 
     return $irs;
-};
+}
 
 sub Clear {
     my $self = $_[0];
@@ -996,7 +997,7 @@ sub freeResources {
 
     if ( $self->_isOpen ) {
 
-        #Close the Open File
+        # Close the Open File
         $self->_closeFile();
     }
 
@@ -1007,32 +1008,32 @@ sub freeResources {
 #Consultation Methods
 
 sub getFileDirectory {
-    my $self = $_[0];
-
-    return $self->{'_directory_name'};
+    return $_[0]->{'_directory_name'};
 }
 
 sub getFileName {
-    my $self = $_[0];
-
-    return $self->{'_file_name'};
+    return $_[0]->{'_file_name'};
 }
 
 sub getFilePath {
-    my $self = $_[0];
-
-    return $self->{'_directory_name'} . $self->{'_file_name'};
+    return $_[0]->{'_directory_name'} . $_[0]->{'_file_name'};
 }
 
 sub getContent {
     my $self = $_[0];
 
-    ${ $self->{'_file_content'} } = ''
+    $self->{'_file_content'} = \''
       unless ( defined $self->{'_file_content'} );
 
-    if ( $self->{'_file_content'} eq '' ) {
+    if ( ${ $self->{'_file_content'} } eq '' ) {
+        print "build cntnt ...\n";
+        print "build lns (" . scalar( @{ $self->{'_file_content_lines'} } ) . "): '"
+          . join( '|', @{ $self->{'_file_content_lines'} } ) . "'\n";
+
         if ( scalar( @{ $self->{'_file_content_lines'} } ) > 0 ) {
-            ${ $self->{'_file_content'} } = join( "\n", @{ $self->{'_file_content_lines'} } );
+            my $content = join( "\n", @{ $self->{'_file_content_lines'} } );
+
+            $self->{'_file_content'} = \$content;
         }
     }
 
@@ -1078,7 +1079,7 @@ sub getFileTime {
             }
         }
     }
-    else     #The File does not exist
+    else    #The File does not exist
     {
         $self->{'_file_time'}        = -1;
         $self->{'_file_access_time'} = -1;
@@ -1112,7 +1113,7 @@ sub getFileSize {
             }
         }
     }
-    else     #The File does not exist
+    else    #The File does not exist
     {
         $self->{'_file_time'}        = -1;
         $self->{'_file_access_time'} = -1;
@@ -1140,13 +1141,13 @@ sub Exists {
                 $irs = 0 unless ( -e $self->{'_directory_name'} . $self->{'_file_name'} );
             }
         }
-        else        #The File Name isnt set
+        else    #The File Name isnt set
         {
             $self->{'_error_message'} .= "File Name isn't set!\n";
             $self->{'_error_code'} = 3 if ( $self->{'_error_code'} < 1 );
         }
     }
-    else            #The File is already open
+    else        #The File is already open
     {
         $irs = 1;
     }
@@ -1161,7 +1162,7 @@ sub _isOpen {
     if ( defined $self->{'_file'} ) {
         $iopn = 1 if ( fileno( $self->{'_file'} ) );
     }
-    else            #The File Handle is not set
+    else    #The File Handle is not set
     {
         $self->{'_file'} = undef unless ( exists $self->{'_file'} );
     }
