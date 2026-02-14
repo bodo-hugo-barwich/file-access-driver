@@ -21,6 +21,12 @@
 #==============================================================================
 # The File::Access::Driver Package
 
+=head1 NAME
+
+File::Access::Driver - Convenient File Access with "Batteries included"
+
+=cut
+
 package File::Access::Driver;
 
 our $VERSION = '1.0.0';
@@ -31,8 +37,53 @@ our $VERSION = '1.0.0';
 use Fcntl ':flock';    # import LOCK_* constants
 use File::Path qw(make_path);
 
+=head1 DESCRIPTION
+
+C<File::Access::Driver> is a class for convenient file access designed to reduce
+the code needed to interact with files.
+
+It has grown to a "I<Batteries included>" solution covering the most file access
+use cases.
+
+It will not produce exceptions but instead report the errors over the C<getErrorCode()>
+and the C<getErrorString()> methods.
+
+=cut
+
 #----------------------------------------------------------------------------
 #Constructors
+
+=head1 METHODS
+
+=head2 Constructor
+
+=over 4
+
+=item new ( [ CONFIGURATIONS ] )
+
+This is the constructor for a new C<File::Access::Driver> object.
+
+B<Parameters:>
+
+=over 4
+
+=item C<CONFIGURATIONS>
+
+Key and value pairs containing the configurations.
+
+B<Recognized fields:>
+
+C<filedirectory> - The directory where the file is located.
+
+C<filename> - The base name of the file.
+
+C<filepath> - The complete path with directory and file base name.
+
+=back
+
+See L<Method C<setArrProcess()>|/"setArrProcess ( CONFIGURATIONS )">
+
+=cut
 
 sub new {
 
@@ -85,6 +136,24 @@ sub DESTROY {
 
 #----------------------------------------------------------------------------
 #Administration Methods
+
+=head3 setFileDirectory ( DIRECTORY )
+
+This method sets the directory where the file is located.
+
+B<Parameters:>
+
+=over 4
+
+=item C<DIRECTORY>
+
+The directory where the file is located.
+
+If the directory does not end on a slash C< / > it will be appended.
+
+=back
+
+=cut
 
 sub setFileDirectory {
     my $self = $_[0];
@@ -703,15 +772,10 @@ sub Write {
         my $content   = $self->getContent();
         my $icntntlen = length( ${$content} );
 
-        print "cntnt len: '$icntntlen'\n";
-        print "cntnt: '${ $content }'\n";
-
         $irs = 0;
 
         # Write the Content Line to the File
         $iwrtcnt = syswrite( $self->{'_file'}, ${$content} );
-
-        print "wrt cnt: '$iwrtcnt'\n";
 
         if ( defined $iwrtcnt ) {
             $irs = 1;

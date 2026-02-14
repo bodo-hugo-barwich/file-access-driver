@@ -7,6 +7,11 @@ to ease up the work with files.
 
 It does not crash but instead reports errors in the in-built error report.
 
+On writing the files if directories do not exist they will be created automatically.
+
+On reading when a file does not exist it does not produce an exception but an empty
+string. But in the error report it can be seen, that the file did not exist.
+
 # Features
 
 Some important Features are:
