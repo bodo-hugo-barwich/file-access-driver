@@ -48,6 +48,47 @@ use cases.
 It will not produce exceptions but instead report the errors over the C<getErrorCode()>
 and the C<getErrorString()> methods.
 
+=head1 SYNOPSIS
+
+The C<File::Access::Driver> can be used as seen in the "I<File Write>" test:
+
+        use File::Access::Driver;
+
+        my $driver = File::Access::Driver->new( 'filepath' => $spath . 'files/out/testfile_out.txt' );
+
+        # Make sure the file does not exist
+        is( $driver->Delete(), 1, "File Delete: Delete operation 1 correct" );
+        is( $driver->Exists(), 0, "File Exist: File does not exist anymore" );
+
+        $driver->writeContent(q(This is the multi line content for the test file.
+
+It will be written into the test file.
+The file should only contain this text.
+Also the file should be created.
+));
+
+        printf(
+            "Test File Exists - File '%s': Write finished with [%d]\n",
+            $driver->getFileName(),
+            $driver->getErrorCode()
+        );
+        printf(
+            "Test File Exists - File '%s': Write Report:\n'%s'\n",
+            $driver->getFileName(),
+            ${ $driver->getReportString() }
+        );
+        printf(
+            "Test File Exists - File '%s': Write Error:\n'%s'\n",
+            $driver->getFileName(),
+            ${ $driver->getErrorString() }
+        );
+
+        is( $driver->getErrorCode(),        0,  "Write Error Code: No errors have occurred" );
+        is( ${ $driver->getErrorString() }, '', "Write Error Message: No errors are reported" );
+
+        is( $driver->Exists(), 1, "File Exist: File does exist now" );
+        isnt( $driver->getFileSize(), 0, "File Size: File is not empty anymore" );
+
 =cut
 
 #----------------------------------------------------------------------------
@@ -81,7 +122,9 @@ C<filepath> - The complete path with directory and file base name.
 
 =back
 
-See L<Method C<setArrProcess()>|/"setArrProcess ( CONFIGURATIONS )">
+See L<Method C<setFileDirectory()>|/"setFileDirectory ( DIRECTORY )">
+
+See L<Method C<setFileName()>|/"setFileName ( NAME )">
 
 =cut
 
@@ -175,6 +218,24 @@ sub setFileDirectory {
     #Clear the File Object
     $self->Clear;
 }
+
+=head3 setFileName ( NAME )
+
+This method sets the base name of the file.
+
+B<Parameters:>
+
+=over 4
+
+=item C<NAME>
+
+The base name of the file.
+
+This will also close open file handles and free in-memory cache.
+
+=back
+
+=cut
 
 sub setFileName {
     my $self = $_[0];
@@ -1067,7 +1128,9 @@ sub freeResources {
         $self->_closeFile();
     }
 
+    #Clear Content
     $self->{'_file_content'} = undef;
+    $self->{'_file_content_lines'} = undef;
 }
 
 #----------------------------------------------------------------------------
