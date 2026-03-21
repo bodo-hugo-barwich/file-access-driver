@@ -29,7 +29,7 @@ File::Access::Driver - Convenient File Access with "Batteries included"
 
 package File::Access::Driver;
 
-our $VERSION = '1.0.0';
+our $VERSION = '1.0.1';
 
 #----------------------------------------------------------------------------
 #Dependencies
@@ -253,6 +253,29 @@ sub setFileName {
     #Clear the File Object
     $self->Clear;
 }
+
+=head3 setFilePath ( PATH )
+
+This method sets the complete path of the file.
+
+B<Parameters:>
+
+=over 4
+
+=item C<PATH>
+
+The complete path of the file.
+
+This will split the C<PATH> and call C<setFileDirectory()> with the directory
+and C<setFileName()> with the file base name.
+
+=back
+
+See L<Method C<setFileDirectory()>|/"setFileDirectory ( DIRECTORY )">
+
+See L<Method C<setFileName()>|/"setFileName ( NAME )">
+
+=cut
 
 sub setFilePath {
     my $self   = $_[0];
