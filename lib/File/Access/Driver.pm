@@ -81,7 +81,9 @@ C<filepath> - The complete path with directory and file base name.
 
 =back
 
-See L<Method C<setArrProcess()>|/"setArrProcess ( CONFIGURATIONS )">
+See L<Method C<setFileDirectory()>|/"setFileDirectory ( DIRECTORY )">
+
+See L<Method C<setFileDirectory()>|/"setFileDirectory ( DIRECTORY )">
 
 =cut
 
@@ -1067,7 +1069,9 @@ sub freeResources {
         $self->_closeFile();
     }
 
+    #Clear Content
     $self->{'_file_content'} = undef;
+    $self->{'_file_content_lines'} = undef;
 }
 
 #----------------------------------------------------------------------------
