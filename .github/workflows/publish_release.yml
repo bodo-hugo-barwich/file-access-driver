@@ -51,7 +51,7 @@ jobs:
         run: |
           git checkout master
           eval $(perl -Mlocal::lib -I ~/perl5/lib/perl5/)
-          package_version_yaml=`run_subprocess.pl -n 'Package Version' -c 'scripts/package_version.pl' -f yaml`
+          package_version_yaml=`run_subprocess.pl -n 'Package Version' -c '.github/scripts/package_version.pl' -f yaml`
           echo -e "$package_version_yaml"
           package_version_res=`echo "$package_version_yaml" | yq '.stdout'`
           echo "* Package Version Result:"
@@ -88,7 +88,7 @@ jobs:
           echo "git - tag: '${{ steps.git_tag.outputs.tag }}'; exists: '${{ steps.git_tag.outputs.exists }}'"
           echo "git - commit: '${{ steps.package_version.outputs.version_commit }}'"
           eval $(perl -Mlocal::lib -I ~/perl5/lib/perl5/)
-          find_commit_res=`scripts/find_version_commit.pl "${{ steps.package_version.outputs.version_commit }}"` || true
+          find_commit_res=`.github/scripts/find_version_commit.pl "${{ steps.package_version.outputs.version_commit }}"` || true
           echo -e "$find_commit_res"
           find_commit_res=`echo "$find_commit_res" | grep -i " by "`
           if [ -z "$find_commit_res" ]; then echo "could not find GIT VERSION COMMIT"; exit 1; fi;

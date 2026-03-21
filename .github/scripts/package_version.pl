@@ -124,7 +124,6 @@ if ( $maindir->child('Makefile.PL')->exists ) {
     if ( $packagesettings =~ qr/^\s*version_from\s*=>\s+['"]([^'"]*)['"]/mi ) {
         $version{version_file} = $1;
     }
-
 }
 else {
     print STDERR "file 'Makefile.PL': file is not found!\n" unless ($quiet);
@@ -154,7 +153,6 @@ unless ( defined $version{version} ) {
             else {
                 print "version miss\n" if ($debug);
             }
-
         }
         else {
             print STDERR
