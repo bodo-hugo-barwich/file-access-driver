@@ -118,7 +118,7 @@ sub find_merge_commit {
 
 my $module_file = path($0)->basename;
 my $path        = path($0)->parent->absolute;
-my $maindir     = $path->parent;
+my $maindir     = $path->parent->parent;
 
 # ------------------------
 # Script Parameter
