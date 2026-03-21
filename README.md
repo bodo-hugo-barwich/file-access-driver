@@ -23,7 +23,61 @@ Some important Features are:
 
 # Usage
 
-The `File::Access::Driver` can be used as seen in the "_File Write_" test:
+The `File::Access::Driver` can be used to **read a file** as seen in the "_File Read_" test:
+
+```perl
+        use File::Access::Driver;
+
+        # Make sure the file exists
+        is( $driver->Exists(), 1, "File Exist: File exists already" );
+        isnt( $driver->getFileSize(), 0, "File Size: File is not empty" );
+
+        is( $driver->Read(), 1, "File Read: Read operation correct" );
+
+        printf(
+            "Test File Read - File '%s': Read finished with [%d]\n",
+            $driver->getFileName(),
+            $driver->getErrorCode()
+        );
+        printf(
+            "Test File Read - File '%s': Read Report:\n'%s'\n",
+            $driver->getFileName(),
+            ${ $driver->getReportString() }
+        );
+        printf(
+            "Test File Read - File '%s': Read Error:\n'%s'\n",
+            $driver->getFileName(),
+            ${ $driver->getErrorString() }
+        );
+
+        is( $driver->getErrorCode(),        0,  "Read Error Code: No errors have occurred" );
+        is( ${ $driver->getErrorString() }, '', "Read Error Message: No errors are reported" );
+
+        my $content = $driver->getContent();
+
+        printf(
+            "Test File Read - File '%s': Read Content (%s):\n'%s'\n",
+            $driver->getFileName(),
+            length( ${$content} ),
+            ${$content}
+        );
+
+        isnt( length( ${$content} ), 0,  "File Content: Length is correct" );
+        isnt( ${$content},           '', "File Content: is not empty" );
+
+        my $content_array = $driver->getContentArray();
+
+        printf(
+            "Test File Read - File '%s': Read Content Lines (%s):\n'%s'\n",
+            $driver->getFileName(),
+            scalar( @{$content_array} ),
+            join( '|', @{$content_array} )
+        );
+
+        is( scalar( @{$content_array} ), 6, "File Content Lines: 6 Lines were read" );
+```
+
+The `File::Access::Driver` can be used to **write a file** as seen in the "_File Write_" test:
 
 ```perl
         use File::Access::Driver;
