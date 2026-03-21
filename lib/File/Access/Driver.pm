@@ -52,42 +52,42 @@ and the C<getErrorString()> methods.
 
 The C<File::Access::Driver> can be used as seen in the "I<File Write>" test:
 
-        use File::Access::Driver;
+    use File::Access::Driver;
 
-        my $driver = File::Access::Driver->new( 'filepath' => $spath . 'files/out/testfile_out.txt' );
+    my $driver = File::Access::Driver->new( 'filepath' => $spath . 'files/out/testfile_out.txt' );
 
-        # Make sure the file does not exist
-        is( $driver->Delete(), 1, "File Delete: Delete operation 1 correct" );
-        is( $driver->Exists(), 0, "File Exist: File does not exist anymore" );
+    # Make sure the file does not exist
+    is( $driver->Delete(), 1, "File Delete: Delete operation 1 correct" );
+    is( $driver->Exists(), 0, "File Exist: File does not exist anymore" );
 
-        $driver->writeContent(q(This is the multi line content for the test file.
+    $driver->writeContent(q(This is the multi line content for the test file.
 
-It will be written into the test file.
-The file should only contain this text.
-Also the file should be created.
-));
+    It will be written into the test file.
+    The file should only contain this text.
+    Also the file should be created.
+    ));
 
-        printf(
-            "Test File Exists - File '%s': Write finished with [%d]\n",
-            $driver->getFileName(),
-            $driver->getErrorCode()
-        );
-        printf(
-            "Test File Exists - File '%s': Write Report:\n'%s'\n",
-            $driver->getFileName(),
-            ${ $driver->getReportString() }
-        );
-        printf(
-            "Test File Exists - File '%s': Write Error:\n'%s'\n",
-            $driver->getFileName(),
-            ${ $driver->getErrorString() }
-        );
+    printf(
+        "Test File Exists - File '%s': Write finished with [%d]\n",
+        $driver->getFileName(),
+        $driver->getErrorCode()
+    );
+    printf(
+        "Test File Exists - File '%s': Write Report:\n'%s'\n",
+        $driver->getFileName(),
+        ${ $driver->getReportString() }
+    );
+    printf(
+        "Test File Exists - File '%s': Write Error:\n'%s'\n",
+        $driver->getFileName(),
+        ${ $driver->getErrorString() }
+    );
 
-        is( $driver->getErrorCode(),        0,  "Write Error Code: No errors have occurred" );
-        is( ${ $driver->getErrorString() }, '', "Write Error Message: No errors are reported" );
+    is( $driver->getErrorCode(),        0,  "Write Error Code: No errors have occurred" );
+    is( ${ $driver->getErrorString() }, '', "Write Error Message: No errors are reported" );
 
-        is( $driver->Exists(), 1, "File Exist: File does exist now" );
-        isnt( $driver->getFileSize(), 0, "File Size: File is not empty anymore" );
+    is( $driver->Exists(), 1, "File Exist: File does exist now" );
+    isnt( $driver->getFileSize(), 0, "File Size: File is not empty anymore" );
 
 =cut
 
@@ -98,9 +98,7 @@ Also the file should be created.
 
 =head2 Constructor
 
-=over 4
-
-=item new ( [ CONFIGURATIONS ] )
+=head3 new ( [ CONFIGURATIONS ] )
 
 This is the constructor for a new C<File::Access::Driver> object.
 
@@ -235,6 +233,8 @@ This will also close open file handles and free in-memory cache.
 
 =back
 
+See L<Method C<Clear()>|/"Clear ()">
+
 =cut
 
 sub setFileName {
@@ -250,7 +250,7 @@ sub setFileName {
 
     $self->{'_file_name'} = '' unless ( defined $self->{'_file_name'} );
 
-    #Clear the File Object
+    # Clear the File Object
     $self->Clear;
 }
 
@@ -1115,6 +1115,13 @@ sub _closeFile {
     return $irs;
 }
 
+=head3 Clear ()
+
+This method closed the file handle and frees the in-memory cache
+and resets also the in-memory file attributes.
+
+=cut
+
 sub Clear {
     my $self = $_[0];
 
@@ -1134,6 +1141,12 @@ sub Clear {
 
 }
 
+=head3 clearErrors ()
+
+Clear the error and activity report and reset the error code.
+
+=cut
+
 sub clearErrors {
     my $self = $_[0];
 
@@ -1141,6 +1154,12 @@ sub clearErrors {
     $self->{'_error_message'} = '';
     $self->{'_error_code'}    = 0;
 }
+
+=head3 freeResources ()
+
+This method closed the file handle and frees the in-memory cache.
+
+=cut
 
 sub freeResources {
     my $self = $_[0];
@@ -1178,11 +1197,6 @@ sub getContent {
       unless ( defined $self->{'_file_content'} );
 
     if ( ${ $self->{'_file_content'} } eq '' ) {
-        print "build cntnt ...\n";
-        print "build lns ("
-          . scalar( @{ $self->{'_file_content_lines'} } ) . "): '"
-          . join( '|', @{ $self->{'_file_content_lines'} } ) . "'\n";
-
         if ( scalar( @{ $self->{'_file_content_lines'} } ) > 0 ) {
             my $content = join( "\n", @{ $self->{'_file_content_lines'} } );
 
