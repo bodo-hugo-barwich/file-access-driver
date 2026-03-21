@@ -1,6 +1,6 @@
 #
 # @author Bodo (Hugo) Barwich
-# @version 2026-01-30
+# @version 2026-03-21
 # @package File Access Driver
 # @subpackage lib/File/Access/Driver.pm
 
@@ -484,6 +484,14 @@ sub setPersistent {
     }
 }
 
+=head3 Create ()
+
+This method will create an empty file.
+
+If the file already exists it will be truncated.
+
+=cut
+
 sub Create {
     my $self = $_[0];
 
@@ -829,6 +837,14 @@ sub readContentArray {
     return $self->getContentArray;
 }
 
+=head3 Truncate ()
+
+This method will empty an existing file.
+
+If the file does not exist it will be created.
+
+=cut
+
 sub Truncate {
     my $self = $_[0];
 
@@ -1171,7 +1187,7 @@ sub freeResources {
     }
 
     #Clear Content
-    $self->{'_file_content'} = undef;
+    $self->{'_file_content'}       = undef;
     $self->{'_file_content_lines'} = undef;
 }
 
