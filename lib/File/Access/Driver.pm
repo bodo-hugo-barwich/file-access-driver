@@ -29,7 +29,7 @@ File::Access::Driver - Convenient File Access with "Batteries included"
 
 package File::Access::Driver;
 
-our $VERSION = '1.0.2';
+our $VERSION = '1.0.3';
 
 #----------------------------------------------------------------------------
 #Dependencies
